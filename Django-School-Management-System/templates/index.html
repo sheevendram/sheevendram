@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <style type="text/css">
+    a:link {
+      text-decoration: none;
+    }
+
+    .order-card {
+      color: #fff;
+    }
+
+    .bg-c-blue {
+      background: linear-gradient(45deg, #4099ff, #73b4ff);
+    }
+
+    .bg-c-green {
+      background: linear-gradient(45deg, #2ed8b6, #59e0c5);
+    }
+
+    .bg-c-yellow {
+      background: linear-gradient(45deg, #FFB64D, #ffcb80);
+    }
+
+    .bg-c-pink {
+      background: linear-gradient(45deg, #FF5370, #ff869a);
+    }
+
+
+    .card {
+      border-radius: 5px;
+      -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+      box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+      border: none;
+      margin-bottom: 30px;
+      -webkit-transition: all 0.3s ease-in-out;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .card .card-block {
+      padding: 25px;
+    }
+
+    .order-card i {
+      font-size: 26px;
+    }
+
+    .f-left {
+      float: left;
+    }
+
+    .f-right {
+      float: right;
+    }
+  </style>
+</head>
+
+<body>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-blue order-card">
+          <div class="card-block">
+            <h6 class="m-b-20">Total Teacher</h6>
+            <h2 class="text-right"><i class="fas fa-chalkboard-teacher f-left"></i><span>{{sta}}</span></h2>
+            <p class="m-b-0">Pending Teacher<span class="f-right">{{object_list.count}}</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20">Total Students</h6>
+            <h2 class="text-right"><i class="fas fa-user-graduate f-left"></i><span>{{stu}}</span></h2>
+            <p class="m-b-0">Pending Students<span class="f-right">{{object_list.count}}</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-yellow order-card">
+          <div class="card-block">
+            <h6 class="m-b-20">Teachers Salary</h6>
+            <h2 class="text-right"><i class="fas fa-search-dollar f-left"></i><span>{{sta}}</span></h2>
+            <p class="m-b-0">Pending Salary<span class="f-right">{{object_list.count}}</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-pink order-card">
+          <div class="card-block">
+            <h6 class="m-b-20">Student Fee</h6>
+            <h2 class="text-right"><i class="fas fa-search-dollar f-left"></i><span>{{fee.amount_paid__sum}}</span></h2>
+            <p class="m-b-0">Pending Dues<span class="f-right">{{object_list.count}}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="table-responsive">
+    {% if ns %}
+    <h4 style="color:#00bfff">Today Total Admission {{ta}}</h4>
+    <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
+      <thead class="thead-light">
+        <tr>
+          <th>S/N</th>
+          <th>Fullname</th>
+          <th>Registration Number</th>
+          <th>Current Class</th>
+          <th>Gender</th>
+          <th>Mobile Phone Number</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+        {% for student in ns %}
+          <tr class='clickable-row' data-href="{% url 'student-detail' student.id %}">
+            <td>{{ forloop.counter}}</td>
+            <td>{{ student.surname}} {{student.firstname }} {{student.other_name }}</td>
+            <td>{{ student.registration_number}}</td>
+            <td>{{ student.current_class}}</td>
+            <td>{{ student.get_gender_display}}</td>
+            <td>{{ student.parent_mobile_number}}</td>
+            
+          </tr>
+        {% endfor %}
+        {% else %}
+        <h4> No Admission Today </h4>
+         {% endif%}    
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="table-responsive">
+    {% if nf %}
+     <h4 style="color:#ff8000">Today Total Fee Collection:-  {{ts.amount_paid__sum}}</h4>
+    <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
+      <thead class="thead-light">
+        <tr>
+          <th>S/N</th>
+          <th>Name</th>
+          <th>Amount Paid</th>
+          <th>Current Class</th>
+          <th>Date</th>
+          <th>Mobile Phone Number</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        
+        
+        {% for student in nf %}
+          <tr class='clickable-row' data-href="{% url 'student-detail' student.id %}">
+            <td>{{ forloop.counter}}</td>
+            <td>{{ student.invoice}}</td>
+            <td>{{ student.amount_paid}}</td>
+            <td>{{ student.invoice.student.current_class}}</td>
+            <td>{{ student.date_paid}}</td>
+            <td>{{ student.invoice.student.parent_mobile_number}}</td>
+            
+          </tr>
+        {% endfor %}
+        {% else %}
+        <h4> No Fee Today </h4>
+         {% endif%}    
+      </tbody>
+    </table>
+  </div>
+
+  
+
+
+  <!--
+written By : sumit kumar
+facebook : fb.com/sumit.luv
+-->
+
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+
+  </script>
+</body>
+
+</html>
+
+{% endblock content %}
