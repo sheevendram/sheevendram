@@ -25,9 +25,7 @@ from .views import (
 urlpatterns = [
     path("", IndexView.as_view(), name="home"),
     path("site-config", SiteConfigView.as_view(), name="configs"),
-    path(
-        "current-session/", CurrentSessionAndTermView.as_view(), name="current-session"
-    ),
+    path("current-session/", CurrentSessionAndTermView.as_view(), name="current-session"),
     path("session/list/", SessionListView.as_view(), name="sessions"),
     path("session/create/", SessionCreateView.as_view(), name="session-create"),
     path(

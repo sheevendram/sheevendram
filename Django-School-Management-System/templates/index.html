@@ -64,6 +64,57 @@
     .f-right {
       float: right;
     }
+
+
+
+
+    .flip-box {
+      background-color: transparent;
+      width: 250px;
+      height: 200px;
+      border: 1px solid #f1f1f1;
+      perspective: 1000px; /* Remove this if you don't want the 3D effect */
+    }
+    
+    /* This container is needed to position the front and back side */
+    .flip-box-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    
+    /* Do an horizontal flip when you move the mouse over the flip box container */
+    .flip-box:hover .flip-box-inner {
+      transform: rotateY(180deg);
+    }
+    
+    /* Position the front and back side */
+    .flip-box-front, .flip-box-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+    }
+    
+    /* Style the front side */
+    .flip-box-front {
+      background-color: #bbb;
+      color: black;
+    }
+    
+    /* Style the back side */
+    .flip-box-back {
+      background-color: dodgerblue;
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+
+    
   </style>
 </head>
 
@@ -76,7 +127,7 @@
           <div class="card-block">
             <h6 class="m-b-20">Total Teacher</h6>
             <h2 class="text-right"><i class="fas fa-chalkboard-teacher f-left"></i><span>{{sta}}</span></h2>
-            <p class="m-b-0">Pending Teacher<span class="f-right">{{object_list.count}}</span></p>
+            <p class="m-b-0">Inactive Teacher<span class="f-right">{{ia}}</span></p>
           </div>
         </div>
       </div>
@@ -104,21 +155,55 @@
       <div class="col-md-4 col-xl-3">
         <div class="card bg-c-pink order-card">
           <div class="card-block">
-            <h6 class="m-b-20">Student Fee</h6>
-            <h2 class="text-right"><i class="fas fa-search-dollar f-left"></i><span>{{fee.amount_paid__sum}}</span></h2>
-            <p class="m-b-0">Pending Dues<span class="f-right">{{object_list.count}}</span></p>
+            <h6 class="m-b-20">Total Payable Amount</h6>
+            <h3 class="text-right"><i class="fas fa-search-dollar f-left"></i><span>{{d}}</span></h3>
+            <h6 class="m-b-0">Total Paid Amount<h5><span class="f-right">{{fee.amount_paid__sum}}</span></h5></h6>
+            <br>
+            <h6 class="m-b-0">Total  Amount<h5><span class="f-right">{{b1}}</span></h5></h6>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  
+ <div class ="container">
+  <div class="row">
+  <div class="flip-box">
+    <div class="flip-box-inner">
+      <div class="flip-box-front">
+        <h2>Front Side {{fee.amount_paid__sum}}</h2>
+      </div>
+      <div class="flip-box-back">
+        <h2>Back Side</h2>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
 
 
+  <div class="flip-box">
+    <div class="flip-box-inner">
+      <div class="flip-box-front">
+        <h2>Front Side</h2>
+      </div>
+      <div class="flip-box-back">
+        <h2>Back Side</h2>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
   <div class="table-responsive">
+    <p>Total Balance:- {{b1}}</p>
+    <p>Total Payable1:- {{d}}</p>
+    <p>Total :- {{bs.balance_from_previous_term__sum}}</p>
+    <p>Total Amount:- {{as.amount__sum}}</p>
+    <p>Total Payable:- {{d}}</p>
     {% if ns %}
-    <h4 style="color:#00bfff">Today Total Admission {{ta}}</h4>
+    <h4 style="color:#00bfff">Today Total Admission </h4>
     <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
       <thead class="thead-light">
         <tr>
@@ -151,8 +236,9 @@
       </tbody>
     </table>
   </div>
-
-
+   {% for i in iat %}
+      <p> {{i.firstname}} </p>
+    {% endfor %}
   <div class="table-responsive">
     {% if nf %}
      <h4 style="color:#ff8000">Today Total Fee Collection:-  {{ts.amount_paid__sum}}</h4>
@@ -172,7 +258,7 @@
         
         
         {% for student in nf %}
-          <tr class='clickable-row' data-href="{% url 'student-detail' student.id %}">
+          <tr class='clickable-row' data-href="{% url 'invoice-detail' student.invoice.id %}">
             <td>{{ forloop.counter}}</td>
             <td>{{ student.invoice}}</td>
             <td>{{ student.amount_paid}}</td>
@@ -188,6 +274,9 @@
       </tbody>
     </table>
   </div>
+
+  
+
 
   
 

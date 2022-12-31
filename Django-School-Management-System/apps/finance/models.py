@@ -54,12 +54,12 @@ class Invoice(models.Model):
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     description = models.CharField(max_length=200)
-    amount = models.IntegerField()
+    amount = models.IntegerField(default=0)
 
 
 class Receipt(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
-    amount_paid = models.IntegerField()
+    amount_paid = models.IntegerField(default=0)
     date_paid = models.DateField(default=timezone.now)
     comment = models.CharField(max_length=200, blank=True)
 

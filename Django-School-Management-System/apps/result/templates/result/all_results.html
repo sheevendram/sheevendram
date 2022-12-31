@@ -13,8 +13,8 @@
             <tr>
               <th></th>
               <th>Subject</th>
-              <th>Test Score</th>
-              <th>Exam Score</th>
+              <th>Practical</th>
+              <th>Theory</th>
               <th>Total Score</th>
               <th>Grade</th>
             </tr>
@@ -38,15 +38,22 @@
               <td>{{ result.exam_total }}</td>
               <td>{{ result.total_total }}</td>
               <td></td>
+              
+             
+            </tr>
+            <tr>
+             <td colspan ="5"> </td>  
+             <td>{{ result.total_total }}/500  </td>
+
             </tr>
           </tfoot>
         </table>
-
-
-
+        {% if result.total_total >= 400 %}
+       <h4>Congrataulation! {{result.student}}</h4>
+        {% endif %}
 
       </div>
     </div>
   {% endfor %}
-
+    
 {% endblock fullcard %}

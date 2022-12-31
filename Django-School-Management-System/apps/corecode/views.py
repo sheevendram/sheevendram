@@ -243,6 +243,7 @@ class CurrentSessionAndTermView(LoginRequiredMixin, View):
 
     form_class = CurrentSessionForm
     template_name = "corecode/current_session.html"
+    
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(
@@ -254,12 +255,13 @@ class CurrentSessionAndTermView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"form": form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_Class(request.POST)
+        form = self.form_class(request.POST)
+        
         if form.is_valid():
             session = form.cleaned_data["current_session"]
             term = form.cleaned_data["current_term"]
             AcademicSession.objects.filter(name=session).update(current=True)
             AcademicSession.objects.exclude(name=session).update(current=False)
             AcademicTerm.objects.filter(name=term).update(current=True)
-
+            AcademicTerm.objects.exclude(name=term).update(current=False)
         return render(request, self.template_name, {"form": form})

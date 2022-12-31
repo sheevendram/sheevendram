@@ -3,7 +3,7 @@ import datetime
 from multiprocessing import context
 from urllib import request
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms import widgets
@@ -12,22 +12,27 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, View
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from apps.finance.models import Invoice,Receipt
+from apps.finance.models import Invoice,Receipt,InvoiceItem
 from apps.staffs.models import Staff
 from .models import Student, StudentBulkUpload
 from django.db.models import Sum
 import datetime
-
+@login_required()
 def index(request):
+    ia =Staff.objects.filter(current_status='inactive').count()
+    iat =Staff.objects.all().filter(current_status='inactive')
+    a=InvoiceItem.objects.aggregate(Sum('amount'))
+    bfv=Invoice.objects.aggregate(Sum('balance_from_previous_term'))
     students= Student.objects.all().count()
     staffs = Staff.objects.all().count()
     fees = Receipt.objects.aggregate(Sum('amount_paid'))
     newstu =Student.objects.filter(date_of_admission=datetime.date.today())
     newf =Receipt.objects.filter(date_paid=datetime.date.today())[:50]
     tos=Receipt.objects.filter(date_paid=datetime.date.today()).aggregate(Sum('amount_paid'))
-    toa=Invoice.total_amount_payable()
-    context= {'stu':students,'sta':staffs,'fee':fees,'ns':newstu,'nf':newf,'ts':tos,'ta':toa}
-    
+    c =a['amount__sum']+bfv['balance_from_previous_term__sum']
+    b=c-fees['amount_paid__sum']
+    context= {'stu':students,'sta':staffs,'fee':fees,'ns':newstu,'nf':newf,'ts':tos,'bs':bfv,'as':a,'d':c,'b1':b,'ia':ia,'iat':iat}
+
     return render(request,"index.html",context)
 
 class StudentListView(LoginRequiredMixin, ListView):

@@ -7,6 +7,7 @@ Update Results
 
 
 {% block content %}
+
 <form method="POST">
   {% csrf_token %}
   {{ formset.management_form}}
@@ -17,8 +18,8 @@ Update Results
         <th></th>
         <th>Name</th>
         <th>Subject</th>
-        <th>Test Score</th>
-        <th>Exam Score</th>
+        <th>Practical</th>
+        <th>Theory</th>
         <th>Total</th>
         <th>Delete</th>
         <th>Class</th>
@@ -30,7 +31,7 @@ Update Results
         <tr>
           <td>{{forloop.counter }}</td>
           <td>{{form.instance.student }}</td>
-          <td>{{form.instance.subject}}</td>
+          <td style ="color:blue"><strong>{{form.instance.subject}}</strong></td>
           <td style="width: 10%;">{{form.test_score | add_class:"form-control form-control-sm"}}</td>
           <td style="width: 10%;">{{form.exam_score | add_class:"form-control form-control-sm"}}</td>
           <td>{{form.instance.total_score}}</td>

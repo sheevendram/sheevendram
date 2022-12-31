@@ -6,4 +6,4 @@ admin.site.register(AcademicTerm)
 admin.site.register(SiteConfig)
 admin.site.register(StudentClass)
 admin.site.register(Subject)
-admin.site.register(Result)
+

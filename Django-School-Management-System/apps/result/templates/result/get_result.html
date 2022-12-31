@@ -1,0 +1,120 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  <title>{{ school_name | default:"MySchool" }}</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet"
+    href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/Datatables/datatables.min.css' %}" />
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
+    rel="stylesheet">
+
+    <style>
+        #my {
+          height: 20px;
+          width: 100%;
+          background-color: powderblue;
+          padding: 10px;
+          text-align:center
+          
+        }
+
+        #my1 {
+            height: 60px;
+            width: 100%;
+            background-color: powderblue;
+            padding: 80px;
+            text-align:center
+            
+          }
+        </style>
+
+</head>
+<body>
+
+    <title>Result</title>
+    <div id='my'>
+     <h2>XYZ School,Rewa</h2>
+    <h2><a href='http://127.0.0.1:8000/result/result'>Result</a></h2>
+    </div>
+    <div id='my1'>
+    <form action=" " method="get">
+        <label for="fname">Roll Number:</label>
+        <input name="q" type="text" placeholder="Enter Your Roll No...">
+        <input  type="submit" value='Result'>
+      </form>
+    </div>
+  {% if results %}
+  {% for key, result in results.items %}
+    <div class="card">
+      <div class="card-header">
+        {{result.student}}
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered table-sm">
+          <thead class="thead-light">
+            <tr>
+              <th></th>
+              <th>Subject</th>
+              <th>Practical</th>
+              <th>Theory</th>
+              <th>Total Score</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subject in result.subjects %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ subject.subject }}</td>
+                <td>{{ subject.test_score }}</td>
+                <td>{{ subject.exam_score }}</td>
+                <td>{{ subject.total_score }}</td>
+                <td>{{ subject.grade }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"></td>
+              <td>{{ result.test_total }}</td>
+              <td>{{ result.exam_total }}</td>
+              <td>{{ result.total_total }}</td>
+              <td></td>
+              
+             
+            </tr>
+            <tr>
+             <td colspan ="5"> </td>  
+             <td>{{ result.total_total }}/500  </td>
+
+            </tr>
+          </tfoot>
+        </table>
+        {% if result.total_total >= 400 %}
+       <h4 style='color:blue'>Congrataulation! {{result.student}}</h4>
+        {% endif %}
+        
+      </div>
+    </div>
+  {% endfor %}
+  {% else %}
+        <h4>Results Will Decleard On 10/11/2022</h4>
+  {% endif %}
+</body>  
+
